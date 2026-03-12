@@ -13,9 +13,22 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+// Configure CORS for production and development
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'https://campussync-phi.vercel.app',
+    'https://sepmbackend.vercel.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.options('*', cors(corsOptions));
 
 // Root route
 app.get('/', (req, res) => {
